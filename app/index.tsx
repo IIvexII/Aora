@@ -9,9 +9,14 @@ import {
 import React from "react";
 import { images } from "@/constants";
 import CustomButton from "@/components/custom-button";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { useGlobalContext } from "@/hooks/use-global-context";
 
 const App = () => {
+  const { isLoading, isAuthenticated } = useGlobalContext();
+
+  if (!isLoading && isAuthenticated) return <Redirect href="/home" />;
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerClassName="flex flex-col items-center justify-center h-full px-4">

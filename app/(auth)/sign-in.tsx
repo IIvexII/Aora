@@ -1,20 +1,43 @@
-import { Text, ScrollView, Image } from "react-native";
 import React, { useState } from "react";
+import { Text, ScrollView, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link, router } from "expo-router";
+
 import FormField from "@/components/form-field";
+import CustomButton from "@/components/custom-button";
 
 import { images } from "@/constants";
-import CustomButton from "@/components/custom-button";
-import { Link } from "expo-router";
+import { signIn } from "@/lib/appwrite";
 
 const SignIn = () => {
   const [form, setform] = useState({
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const submit = () => {
-    console.log(form);
+  // submit form handler function
+  const submitHandler = async () => {
+    if (!form.email || !form.password) {
+      Alert.alert(
+        "All Fields are Required",
+        "Please fill all the fields to sign into Aora."
+      );
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await signIn(form.email, form.password);
+
+      // redirect the user to home page
+      router.push("/home");
+    } catch (error: unknown) {
+      Alert.alert("Invalid Credentials", "Email or password is incorrect");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,8 +68,9 @@ const SignIn = () => {
         />
         <CustomButton
           title="Sign in"
+          isLoading={isLoading}
           containerStyles="mt-10"
-          handlePress={submit}
+          handlePress={submitHandler}
         />
 
         <Text className="text-white text-center mt-6 text-lg">

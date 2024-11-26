@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 
 import "../styles/global.css";
+
+import { GlobalProvider } from "@/context/global-provider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,32 +32,34 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(auth)/sign-in"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(auth)/sign-up"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack>
+    <GlobalProvider>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/sign-in"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/sign-up"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack>
+    </GlobalProvider>
   );
 };
 

@@ -21,7 +21,7 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Submit form handler function
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (!form.username || !form.email || !form.password) {
       Alert.alert(
         "All Fields are Required",
@@ -33,12 +33,16 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-      createUser(form.username, form.email, form.password);
+      await createUser(form.username, form.email, form.password);
 
       // redirect the user to home page
       router.push("/home");
-    } catch (error) {
-      Alert.alert("An error occurred, please try again");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Alert.alert("Error", error.message);
+      } else {
+        Alert.alert("Error", "Failed to create user");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -80,6 +84,7 @@ const SignUp = () => {
         <CustomButton
           title="Sign up"
           containerStyles="mt-10"
+          isLoading={isLoading}
           handlePress={submitHandler}
         />
 

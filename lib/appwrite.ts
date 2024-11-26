@@ -1,4 +1,12 @@
-import { Client, Account, ID, Avatars, Databases } from "react-native-appwrite";
+import {
+  Client,
+  Account,
+  ID,
+  Avatars,
+  Databases,
+  Query,
+} from "react-native-appwrite";
+
 const config = {
   endpoint: "https://cloud.appwrite.io/v1",
   packageName: "com.vectorx.aora",
@@ -14,6 +22,7 @@ const client = new Client()
   .setProject(config.projectId)
   .setPlatform(config.packageName);
 
+// Initialize services
 const account = new Account(client);
 const avatar = new Avatars(client);
 const database = new Databases(client);
@@ -24,48 +33,56 @@ export async function createUser(
   password: string
 ) {
   // Function starts here
-  try {
-    // Register User
-    const newAccount = await account.create(
-      ID.unique(),
+  const userId = ID.unique();
+
+  // Register User
+  const newAccount = await account.create(userId, email, password, username);
+
+  if (!newAccount) {
+    throw new Error("Failed to create user");
+  }
+
+  // Create user avatar
+  const avatarUrl = avatar.getInitials(username);
+  // Create user profile
+  const newUser = await database.createDocument(
+    config.databaseId,
+    config.userCollectionId,
+    userId,
+    {
+      accountId: newAccount.$id,
+      username,
       email,
-      password,
-      username
-    );
-
-    if (!newAccount) {
-      throw new Error("Failed to create user");
+      avatar: avatarUrl,
     }
+  );
 
-    // Create user avatar
-    const avatarUrl = avatar.getInitials(username);
+  await signIn(email, password);
 
-    // Create user profile
-    const newUser = await database.createDocument(
+  return newUser;
+}
+
+// Get Current User
+export async function getCurrentUser() {
+  try {
+    const currentAccount = await account.get();
+    if (!currentAccount) throw Error;
+
+    const currentUser = await database.listDocuments(
       config.databaseId,
       config.userCollectionId,
-      ID.unique(),
-      {
-        username,
-        email,
-        avatar: avatarUrl,
-      }
+      [Query.equal("accountId", currentAccount.$id)]
     );
 
-    await SignIn(email, password);
+    if (!currentUser) throw Error;
 
-    return newUser;
+    return currentUser.documents[0];
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return null;
   }
 }
 
-export const SignIn = async (email: string, password: string) => {
-  try {
-    return await account.createSession(email, password);
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+export async function signIn(email: string, password: string) {
+  return await account.createEmailPasswordSession(email, password);
+}
