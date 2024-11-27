@@ -34,12 +34,12 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
-        className="px-6 space-y-6 my-16"
+        className="px-6 mt-16"
         data={videos}
         keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => <VideoCard />}
+        renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={
-          <View>
+          <View className="mb-8">
             {/* top welcome text with name */}
             <View className="flex justify-between flex-row pr-1">
               <View>
@@ -61,12 +61,12 @@ const Home = () => {
             <SearchBar placeholder="Search here..." containerStyle="mt-6" />
 
             {/* Trending Posts */}
-            <View>
+            {/* <View>
               <Text className="text-white text-lg font-pregular mt-8 mb-6">
                 Trending Posts
               </Text>
               <TrendingVideos posts={[{ id: 1 }, { id: 2 }, { id: 3 }]} />
-            </View>
+            </View> */}
           </View>
         }
         ListEmptyComponent={<EmptyState />}

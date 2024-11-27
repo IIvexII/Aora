@@ -6,6 +6,7 @@ import {
   Databases,
   Query,
 } from "react-native-appwrite";
+import { IVideoModel } from "@/types/types";
 
 const config = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -115,5 +116,5 @@ export async function getVAllideos() {
     config.videoCollectionId
   );
 
-  return videos.documents;
+  return videos.documents as IVideoModel[];
 }
