@@ -27,6 +27,7 @@ const account = new Account(client);
 const avatar = new Avatars(client);
 const database = new Databases(client);
 
+// Create User
 export async function createUser(
   username: string,
   email: string,
@@ -83,6 +84,36 @@ export async function getCurrentUser() {
   }
 }
 
+// Sign In
 export async function signIn(email: string, password: string) {
   return await account.createEmailPasswordSession(email, password);
+}
+
+// Create Video
+export async function createVideo(video: {
+  title: string;
+  thumbnail: string;
+  prompt: string;
+  video: string;
+}) {
+  const newVideo = await database.createDocument(
+    config.databaseId,
+    config.videoCollectionId,
+    ID.unique(),
+    {
+      ...video,
+    }
+  );
+
+  return newVideo;
+}
+
+// Get Videos
+export async function getVAllideos() {
+  const videos = await database.listDocuments(
+    config.databaseId,
+    config.videoCollectionId
+  );
+
+  return videos.documents;
 }
