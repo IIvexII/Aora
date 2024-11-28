@@ -118,3 +118,24 @@ export async function getVAllideos() {
 
   return videos.documents as IVideoModel[];
 }
+
+// Get trending videos
+export async function getTrendingVideos() {
+  const videos = await database.listDocuments(
+    config.databaseId,
+    config.videoCollectionId,
+    [Query.orderAsc("$createdAt"), Query.limit(3)]
+  );
+
+  return videos.documents as IVideoModel[];
+}
+
+export async function searchVideos(query: string) {
+  const videos = await database.listDocuments(
+    config.databaseId,
+    config.videoCollectionId,
+    [Query.search("title", query)]
+  );
+
+  return videos.documents as IVideoModel[];
+}

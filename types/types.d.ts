@@ -8,5 +8,5 @@ interface IVideoModel extends Models.Document {
   creator: {
     username: string;
     avatar: string;
-  };
+  } | null;
 }

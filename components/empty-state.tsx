@@ -3,17 +3,17 @@ import React from "react";
 import { images } from "@/constants";
 import CustomButton from "./custom-button";
 
-const EmptyState = () => {
+type EmptyStateProps = {
+  title: string;
+  subtitle: string;
+};
+
+const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
   return (
     <View className="justify-center items-center">
       <Image source={images.empty} className="w-80 h-80" resizeMode="contain" />
-      <Text className="text-white text-2xl font-semibold -mt-6">
-        No Video Found
-      </Text>
-      <Text className="text-green-100 text-sm font-pregular">
-        Be the first one to create video!
-      </Text>
-
+      <Text className="text-white text-2xl font-semibold -mt-6">{title}</Text>
+      <Text className="text-green-100 text-sm font-pregular">{subtitle}</Text>
       <CustomButton
         title="Create Video"
         handlePress={() => {}}

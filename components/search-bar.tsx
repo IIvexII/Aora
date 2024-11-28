@@ -1,20 +1,46 @@
-import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  GestureResponderEvent,
+  Alert,
+} from "react-native";
+import { router, usePathname } from "expo-router";
+
 import { icons } from "@/constants";
 
 type FormFieldProps = {
   placeholder: string;
   value?: string;
   containerStyle?: string;
-  handleChangeText?: (text: string) => void;
+  initialQuery?: string;
 };
 
 const SearchBar = ({
   value,
   placeholder,
-  handleChangeText,
   containerStyle,
+  initialQuery,
 }: FormFieldProps) => {
+  const [query, setQuery] = useState("");
+  const pathmame = usePathname();
+
+  function handleSearch() {
+    if (!query)
+      return Alert.alert(
+        "Empty Search Field",
+        "Please enter something to search into our database."
+      );
+
+    if (pathmame.startsWith("/search")) {
+      router.setParams({ query });
+    } else {
+      router.push(`/search/${query}`);
+    }
+  }
+
   return (
     <View className={containerStyle}>
       <View className="border border-gray-50/10 rounded-xl h-16 bg-black-200">
@@ -24,10 +50,14 @@ const SearchBar = ({
           placeholder={placeholder}
           placeholderTextColor={"#7b7b8b"}
           value={value}
-          onChangeText={handleChangeText}
+          onChangeText={(e) => setQuery(e)}
+          defaultValue={initialQuery}
         />
-        <TouchableOpacity className="absolute right-4">
-          <Image source={icons.search} className="w-10" resizeMode="contain" />
+        <TouchableOpacity
+          onPress={handleSearch}
+          className="absolute right-6 top-1"
+        >
+          <Image source={icons.search} className="w-6" resizeMode="contain" />
         </TouchableOpacity>
       </View>
     </View>

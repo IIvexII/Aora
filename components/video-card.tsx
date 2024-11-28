@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import { IVideoModel } from "@/types/types";
 import { icons } from "@/constants";
+import VideoPlayer from "./video-player";
 
 type VideoCardProps = {
   video: IVideoModel;
@@ -39,7 +40,13 @@ export default function VideoCard({
 
       {/* video thumbnail */}
       {isPlaying ? (
-        <Text className="text-white">Playing Video....</Text>
+        <View className="mt-4 h-[250px] bg-black-200">
+          <VideoPlayer
+            className="w-full h-full"
+            source={video}
+            onVideoEnd={() => setIsPlaying(false)}
+          />
+        </View>
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}

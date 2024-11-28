@@ -12,29 +12,33 @@ import useAppWrite from "@/hooks/use-appwrite";
 import { GlobalContext } from "@/context/global-provider";
 
 import { capitalize } from "@/lib/utils";
-import { getVAllideos } from "@/lib/appwrite";
+import { getTrendingVideos, getVAllideos } from "@/lib/appwrite";
 import { images } from "@/constants";
 import VideoCard from "@/components/video-card";
+import VideoPlayer from "@/components/video-player";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useContext(GlobalContext);
 
   // Custom hook to fetch the videos data from database.
-  const { data: videos, isLoading, refetch } = useAppWrite(getVAllideos);
+  const { data: videos, refetch } = useAppWrite(getVAllideos);
+  const { data: trendingVideos, refetch: trendingRefetch } =
+    useAppWrite(getTrendingVideos);
 
   // When user pull down the screen it will
   // refetch the videos data from database again.
   async function onRefresh() {
     setRefreshing(true);
     await refetch();
+    await trendingRefetch();
     setRefreshing(false);
   }
 
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
-        className="px-6 mt-16"
+        className="px-6 pt-16"
         data={videos}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
@@ -61,15 +65,20 @@ const Home = () => {
             <SearchBar placeholder="Search here..." containerStyle="mt-6" />
 
             {/* Trending Posts */}
-            {/* <View>
+            <View>
               <Text className="text-white text-lg font-pregular mt-8 mb-6">
                 Trending Posts
               </Text>
-              <TrendingVideos posts={[{ id: 1 }, { id: 2 }, { id: 3 }]} />
-            </View> */}
+              <TrendingVideos videos={trendingVideos} />
+            </View>
           </View>
         }
-        ListEmptyComponent={<EmptyState />}
+        ListEmptyComponent={
+          <EmptyState
+            title="No Video Found"
+            subtitle="Be the first one to create video!"
+          />
+        }
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

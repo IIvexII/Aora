@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import "../styles/global.css";
 
 import { GlobalProvider } from "@/context/global-provider";
+import { StatusBar } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -58,7 +59,17 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="search/[query]"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
+
+      {/* hide the top mobile battery and time  */}
+
+      <StatusBar backgroundColor={"#161622"} barStyle={"light-content"} />
     </GlobalProvider>
   );
 };
