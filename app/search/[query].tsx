@@ -21,8 +21,6 @@ const Search = () => {
     searchVideos(query as string)
   );
 
-  console.log(query, videos);
-
   useEffect(() => {
     refetch();
   }, [query]);

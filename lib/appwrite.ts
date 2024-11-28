@@ -139,3 +139,13 @@ export async function searchVideos(query: string) {
 
   return videos.documents as IVideoModel[];
 }
+
+export async function getUserVideos(userId: string) {
+  const videos = await database.listDocuments(
+    config.databaseId,
+    config.videoCollectionId,
+    [Query.equal("creator", userId)]
+  );
+
+  return videos.documents as IVideoModel[];
+}
