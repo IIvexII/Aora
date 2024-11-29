@@ -5,6 +5,10 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite', // Slow spin
+        'spin-fast': 'spin 0.5s linear infinite', // Fast spin
+      },
       colors: {
         primary: "#161622",
         secondary: {

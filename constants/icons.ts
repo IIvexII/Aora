@@ -12,6 +12,7 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import guest from "@/assets/icons/guest.png";
+import loader from "@/assets/icons/loader.png";
 
 export default {
   play,
@@ -28,4 +29,5 @@ export default {
   eyeHide,
   eye,
   guest,
+  loader,
 };
