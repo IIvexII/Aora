@@ -7,7 +7,8 @@ import FormField from "@/components/form-field";
 import CustomButton from "@/components/custom-button";
 
 import { images } from "@/constants";
-import { signIn } from "@/lib/appwrite";
+import { getCurrentUser, signIn } from "@/lib/appwrite";
+import { useGlobalContext } from "@/hooks/use-global-context";
 
 const SignIn = () => {
   const [form, setform] = useState({
@@ -15,6 +16,7 @@ const SignIn = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser, setIsAuthenticated } = useGlobalContext();
 
   // submit form handler function
   const submitHandler = async () => {
@@ -29,11 +31,14 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
-      await signIn(form.email, form.password);
+      const session = await signIn(form.email, form.password);
+      setUser!(await getCurrentUser());
+      setIsAuthenticated!(true);
 
       // redirect the user to home page
       router.push("/home");
     } catch (error: unknown) {
+      console.log(error);
       Alert.alert("Invalid Credentials", "Email or password is incorrect");
     } finally {
       setIsLoading(false);

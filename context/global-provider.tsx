@@ -5,15 +5,22 @@ import { Models } from "react-native-appwrite";
 type User = Models.Document;
 
 type GlobalContextType = {
-  user?: User | null;
-  setUser?: (user: any) => void;
-  isAuthenticated?: boolean;
-  setIsAuthenticated?: (isAuthenticated: boolean) => void;
-  isLoading?: boolean;
-  setIsLoading?: (isLoading: boolean) => void;
+  user: User | null;
+  setUser: (user: any) => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
-export const GlobalContext = createContext<GlobalContextType>({});
+export const GlobalContext = createContext<GlobalContextType>({
+  user: null,
+  setUser: () => {},
+  isAuthenticated: false,
+  setIsAuthenticated: () => {},
+  isLoading: true,
+  setIsLoading: () => {},
+});
 
 export const GlobalProvider = ({ children }: { children: React.ReactNode }) => {
   // states

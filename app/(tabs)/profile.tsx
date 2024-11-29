@@ -1,25 +1,49 @@
-import React, { useContext } from "react";
-import { View, Text, FlatList } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Image } from "react-native";
 
 import useAppWrite from "@/hooks/use-appwrite";
 import { GlobalContext } from "@/context/global-provider";
-import { getUserVideos } from "@/lib/appwrite";
+import { getUserVideos, signOut } from "@/lib/appwrite";
 
 import VideoCard from "@/components/video-card";
 import InfoBox from "@/components/info-box";
 import { icons } from "@/constants";
 
 const Profile = () => {
-  const { user, isAuthenticated } = useContext(GlobalContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const { user, setUser, setIsAuthenticated, isAuthenticated } =
+    useContext(GlobalContext);
 
   // check if the user is logged in else redirect it to onboarding screen
-  if (!isAuthenticated || !user) return router.push("/");
+  if (!isAuthenticated || !user) return router.replace("/");
 
   // Custom hook to fetch the videos data from database.
-  const { data: videos } = useAppWrite(getUserVideos.bind(null, user.$id));
+  const { data: videos, refetch } = useAppWrite(
+    getUserVideos.bind(null, user.$id)
+  );
+
+  async function handleSignOut() {
+    await signOut();
+    setIsAuthenticated!(false);
+    setUser!(null);
+
+    router.replace("/sign-in");
+  }
+
+  async function refresh() {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -30,9 +54,12 @@ const Profile = () => {
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={
           <View className="mb-8">
-            <View className="flex-row justify-end mb-4">
+            <TouchableOpacity
+              onPress={handleSignOut}
+              className="flex-row justify-end mb-4"
+            >
               <Image source={icons.logout} className="w-6 h-6" />
-            </View>
+            </TouchableOpacity>
             {/* User Info -- avatar and username */}
             <View className="items-center justify-center w-full gap-2">
               <Image
@@ -50,6 +77,9 @@ const Profile = () => {
               <InfoBox title="1.6K" subtitle="Followers" />
             </View>
           </View>
+        }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
         }
       />
     </SafeAreaView>

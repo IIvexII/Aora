@@ -15,7 +15,6 @@ import { capitalize } from "@/lib/utils";
 import { getTrendingVideos, getVAllideos } from "@/lib/appwrite";
 import { images } from "@/constants";
 import VideoCard from "@/components/video-card";
-import VideoPlayer from "@/components/video-player";
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState(false);

@@ -5,8 +5,9 @@ import FormField from "@/components/form-field";
 
 import { images } from "@/constants";
 import CustomButton from "@/components/custom-button";
-import { Link, Redirect, router } from "expo-router";
-import { createUser } from "@/lib/appwrite";
+import { Link, router } from "expo-router";
+import { createUser, getCurrentUser, signIn } from "@/lib/appwrite";
+import { useGlobalContext } from "@/hooks/use-global-context";
 
 const initialFormState = {
   username: "",
@@ -19,6 +20,7 @@ const SignUp = () => {
   // form state
   const [form, setform] = useState(initialFormState);
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser, setIsAuthenticated } = useGlobalContext();
 
   // Submit form handler function
   const submitHandler = async () => {
@@ -35,8 +37,14 @@ const SignUp = () => {
     try {
       await createUser(form.username, form.email, form.password);
 
+      await signIn(form.email, form.password);
+
+      // set the states in global context
+      setUser(await getCurrentUser());
+      setIsAuthenticated(true);
+
       // redirect the user to home page
-      router.push("/home");
+      router.replace("/home");
     } catch (error: unknown) {
       if (error instanceof Error) {
         Alert.alert("Error", error.message);

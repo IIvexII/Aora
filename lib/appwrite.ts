@@ -59,8 +59,6 @@ export async function createUser(
     }
   );
 
-  await signIn(email, password);
-
   return newUser;
 }
 
@@ -80,14 +78,19 @@ export async function getCurrentUser() {
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
 
-// Sign In
+// Sign In and return user
 export async function signIn(email: string, password: string) {
-  return await account.createEmailPasswordSession(email, password);
+  await account.createEmailPasswordSession(email, password);
+  return getCurrentUser();
+}
+
+// signOut
+export async function signOut() {
+  return await account.deleteSession("current");
 }
 
 // Create Video
