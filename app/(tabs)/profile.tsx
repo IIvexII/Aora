@@ -28,7 +28,7 @@ const Profile = () => {
 
   // Custom hook to fetch the videos data from database.
   const { data: videos, refetch } = useAppWrite(
-    getUserVideos.bind(null, user.$id)
+    getUserVideos.bind(null, user.$id),
   );
 
   async function handleSignOut() {
@@ -46,7 +46,7 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="h-full bg-primary">
       <FlatList
         className="px-6 pt-16"
         data={videos}
@@ -56,23 +56,23 @@ const Profile = () => {
           <View className="mb-8">
             <TouchableOpacity
               onPress={handleSignOut}
-              className="flex-row justify-end mb-4"
+              className="mb-4 flex-row justify-end"
             >
-              <Image source={icons.logout} className="w-6 h-6" />
+              <Image source={icons.logout} className="h-6 w-6" />
             </TouchableOpacity>
             {/* User Info -- avatar and username */}
-            <View className="items-center justify-center w-full gap-2">
+            <View className="w-full items-center justify-center gap-2">
               <Image
                 source={{ uri: user.avatar }}
-                className="w-28 h-28 rounded-xl border border-secondary"
+                className="h-28 w-28 rounded-xl border border-secondary"
               />
-              <Text className="text-2xl text-green-100 font-pmedium">
+              <Text className="font-pmedium text-2xl text-green-100">
                 @{user.username}
               </Text>
             </View>
 
             {/* user account info -- post count and followers */}
-            <View className="mt-8 flex-row gap-12 justify-center items-center w-full">
+            <View className="mt-8 w-full flex-row items-center justify-center gap-12">
               <InfoBox title={videos?.length || 0} subtitle="Posts" />
               <InfoBox title="1.6K" subtitle="Followers" />
             </View>

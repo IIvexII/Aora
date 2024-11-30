@@ -34,10 +34,10 @@ const FormField = ({
 
   return (
     <View className={containerStyle}>
-      <Text className="text-white mb-3 text-lg">{title}</Text>
-      <View className="border border-gray-50/10 rounded-xl h-16 bg-black-200">
+      <Text className="mb-3 text-lg text-white">{title}</Text>
+      <View className="h-16 rounded-xl border border-gray-50/10 bg-black-200">
         <TextInput
-          className="relative text-white h-full min-w-full px-6"
+          className="relative h-full min-w-full px-6 text-white"
           cursorColor="#FF9C01"
           placeholder={placeholder}
           placeholderTextColor={"#7b7b8b"}

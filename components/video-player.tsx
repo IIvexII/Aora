@@ -19,7 +19,7 @@ export default function VideoPlayer({
   const videoId = source.split("/")[source.split("/").length - 1].split("?")[0];
 
   return (
-    <View className={`rounded-3xl w-full h-full bg-black ${className}`}>
+    <View className={`h-full w-full rounded-3xl bg-black ${className}`}>
       <Vimeo
         style={{ backgroundColor: "black" }}
         startInLoadingState

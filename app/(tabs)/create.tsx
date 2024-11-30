@@ -1,11 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  ImageSourcePropType,
-} from "react-native";
+import { useContext, useState } from "react";
+import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Image } from "react-native";
@@ -89,9 +83,9 @@ const Create = () => {
   }
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="py-8 px-4">
-        <Text className="text-white text-2xl font-semibold">Upload Video</Text>
+    <SafeAreaView className="h-full bg-primary">
+      <ScrollView className="px-4 py-8">
+        <Text className="text-2xl font-semibold text-white">Upload Video</Text>
         <View className="mt-12 gap-6">
           <FormField
             title="Video Title"
@@ -102,27 +96,27 @@ const Create = () => {
 
           {/* Video Upload */}
           <View>
-            <Text className="text-white text-lg mb-4">Upload Video</Text>
+            <Text className="mb-4 text-lg text-white">Upload Video</Text>
             <FileUploader
               file={form.video}
               onPress={openPicker.bind(null, "videos")}
               type="video"
             >
-              <Image source={icons.upload} className="w-12 h-12" />
+              <Image source={icons.upload} className="h-12 w-12" />
             </FileUploader>
           </View>
 
           {/* Thumbnail Upload */}
           <View>
-            <Text className="text-white text-lg mt-4">Upload Thumbnail</Text>
+            <Text className="mt-4 text-lg text-white">Upload Thumbnail</Text>
             <FileUploader
               file={form.thumbnail}
               onPress={openPicker.bind(null, "images")}
               type="image"
             >
-              <View className="flex flex-row justify-center items-center gap-2 w-full h-full pl-1">
-                <Image source={icons.upload} className="w-10 h-10" />
-                <Text className="text-white font-pregular">
+              <View className="flex h-full w-full flex-row items-center justify-center gap-2 pl-1">
+                <Image source={icons.upload} className="h-10 w-10" />
+                <Text className="font-pregular text-white">
                   Upload Thumbnail
                 </Text>
               </View>

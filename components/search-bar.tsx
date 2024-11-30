@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Alert,
-} from "react-native";
+import { useState } from "react";
+import { View, TextInput, Image, TouchableOpacity, Alert } from "react-native";
 import { router, usePathname } from "expo-router";
 
 import { icons } from "@/constants";
@@ -31,7 +24,7 @@ const SearchBar = ({
     if (!query)
       return Alert.alert(
         "Empty Search Field",
-        "Please enter something to search into our database."
+        "Please enter something to search into our database.",
       );
 
     if (pathmame.startsWith("/search")) {
@@ -43,9 +36,9 @@ const SearchBar = ({
 
   return (
     <View className={containerStyle}>
-      <View className="border border-gray-50/10 rounded-xl h-16 bg-black-200">
+      <View className="h-16 rounded-xl border border-gray-50/10 bg-black-200">
         <TextInput
-          className="relative text-white h-full min-w-full px-6"
+          className="relative h-full min-w-full px-6 text-white"
           cursorColor="#FF9C01"
           placeholder={placeholder}
           placeholderTextColor={"#7b7b8b"}

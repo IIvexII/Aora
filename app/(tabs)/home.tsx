@@ -35,7 +35,7 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="h-full bg-primary">
       <FlatList
         className="px-6 pt-16"
         data={videos}
@@ -44,18 +44,18 @@ const Home = () => {
         ListHeaderComponent={
           <View className="mb-8">
             {/* top welcome text with name */}
-            <View className="flex justify-between flex-row pr-1">
+            <View className="flex flex-row justify-between pr-1">
               <View>
-                <Text className="text-sm text-green-100 font-pmedium">
+                <Text className="font-pmedium text-sm text-green-100">
                   Welcome Back
                 </Text>
-                <Text className="text-2xl text-white font-psemibold">
+                <Text className="font-psemibold text-2xl text-white">
                   {capitalize(user?.username as string)}
                 </Text>
               </View>
               <Image
                 source={images.logoSmall}
-                className="w-9 h-12 "
+                className="h-12 w-9"
                 resizeMode="contain"
               />
             </View>
@@ -65,7 +65,7 @@ const Home = () => {
 
             {/* Trending Posts */}
             <View>
-              <Text className="text-white text-lg font-pregular mt-8 mb-6">
+              <Text className="mb-6 mt-8 font-pregular text-lg text-white">
                 Trending Posts
               </Text>
               <TrendingVideos videos={trendingVideos} />

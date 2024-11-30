@@ -10,10 +10,10 @@ type EmptyStateProps = {
 
 const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
   return (
-    <View className="justify-center items-center">
-      <Image source={images.empty} className="w-80 h-80" resizeMode="contain" />
-      <Text className="text-white text-2xl font-semibold -mt-6">{title}</Text>
-      <Text className="text-green-100 text-sm font-pregular">{subtitle}</Text>
+    <View className="items-center justify-center">
+      <Image source={images.empty} className="h-80 w-80" resizeMode="contain" />
+      <Text className="-mt-6 text-2xl font-semibold text-white">{title}</Text>
+      <Text className="font-pregular text-sm text-green-100">{subtitle}</Text>
       <CustomButton
         title="Create Video"
         handlePress={() => {}}

@@ -18,13 +18,13 @@ function CustomButton({
 }: CustomButtonProps) {
   return (
     <TouchableOpacity
-      className={`bg-secondary min-h-[58px] rounded-2xl w-full justify-center items-center ${containerStyles} ${
+      className={`min-h-[58px] w-full items-center justify-center rounded-2xl bg-secondary ${containerStyles} ${
         isLoading && "bg-secondary/80"
       }`}
       onPress={handlePress}
       disabled={isLoading}
     >
-      <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
+      <Text className={`font-psemibold text-lg text-primary ${textStyles}`}>
         {title}
       </Text>
     </TouchableOpacity>

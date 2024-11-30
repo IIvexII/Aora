@@ -36,12 +36,12 @@ export default function FileUploader({
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      className="mt-4 bg-white/10 h-32 justify-center items-center rounded-xl"
+      className="mt-4 h-32 items-center justify-center rounded-xl bg-white/10"
       onPress={handleUpload}
       disabled={isLoading}
     >
       {file ? (
-        <View className="relative items-center justify-center w-full h-full">
+        <View className="relative h-full w-full items-center justify-center">
           {isLoading ? (
             // rotate the loader
             <ActivityIndicator size={"large"} color={"orange"} />
@@ -49,12 +49,12 @@ export default function FileUploader({
             <>
               <Image
                 source={{ uri: file.uri }}
-                className="w-full h-full rounded-xl opacity-70"
+                className="h-full w-full rounded-xl opacity-70"
               />
               {type === "video" && (
                 <Image
                   source={icons.play}
-                  className="absolute w-12 h-12"
+                  className="absolute h-12 w-12"
                   resizeMode="contain"
                 />
               )}

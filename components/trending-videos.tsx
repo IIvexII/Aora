@@ -43,7 +43,7 @@ function TrendingVideoItem({
       animation={isActive ? zoomIn : zoomOut}
       duration={300}
       useNativeDriver
-      className="w-64 h-96"
+      className="h-96 w-64"
     >
       {isPlaying ? (
         <VideoPlayer
@@ -54,15 +54,15 @@ function TrendingVideoItem({
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => setIsPlaying(!isPlaying)}
-          className="relative flex flex-col justify-center items-center"
+          className="relative flex flex-col items-center justify-center"
         >
           <Image
             source={{ uri: video.thumbnail }}
-            className="w-full h-full rounded-3xl"
+            className="h-full w-full rounded-3xl"
           />
           <Image
             source={icons.play}
-            className="absolute w-12 h-12"
+            className="absolute h-12 w-12"
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -73,7 +73,7 @@ function TrendingVideoItem({
 
 const TrendingVideos = ({ videos }: TrendingVideosProps) => {
   const [activeVideo, setActiveVideo] = React.useState<IVideoModel | null>(
-    videos?.[0] || null
+    videos?.[0] || null,
   );
 
   const handleViewableItemsChanged = useCallback(
@@ -82,14 +82,14 @@ const TrendingVideos = ({ videos }: TrendingVideosProps) => {
         setActiveVideo(viewableItems[0].item);
       }
     },
-    []
+    [],
   );
 
   const viewabilityConfig = useMemo(
     () => ({
       itemVisiblePercentThreshold: 70,
     }),
-    []
+    [],
   );
 
   return (
