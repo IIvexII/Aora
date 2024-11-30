@@ -5,8 +5,12 @@ import {
   Avatars,
   Databases,
   Query,
+  Storage,
 } from "react-native-appwrite";
 import { IVideoModel } from "@/types/types";
+import { ImagePickerAsset } from "expo-image-picker";
+import { Platform } from "react-native";
+import { getFileExtension } from "./utils";
 
 const config = {
   endpoint: "https://cloud.appwrite.io/v1",
@@ -27,12 +31,13 @@ const client = new Client()
 const account = new Account(client);
 const avatar = new Avatars(client);
 const database = new Databases(client);
+const storage = new Storage(client);
 
 // Create User
 export async function createUser(
   username: string,
   email: string,
-  password: string
+  password: string,
 ) {
   // Function starts here
   const userId = ID.unique();
@@ -56,7 +61,7 @@ export async function createUser(
       username,
       email,
       avatar: avatarUrl,
-    }
+    },
   );
 
   return newUser;
@@ -71,7 +76,7 @@ export async function getCurrentUser() {
     const currentUser = await database.listDocuments(
       config.databaseId,
       config.userCollectionId,
-      [Query.equal("accountId", currentAccount.$id)]
+      [Query.equal("accountId", currentAccount.$id)],
     );
 
     if (!currentUser) throw Error;
@@ -106,7 +111,7 @@ export async function createVideo(video: {
     ID.unique(),
     {
       ...video,
-    }
+    },
   );
 
   return newVideo;
@@ -116,7 +121,7 @@ export async function createVideo(video: {
 export async function getVAllideos() {
   const videos = await database.listDocuments(
     config.databaseId,
-    config.videoCollectionId
+    config.videoCollectionId,
   );
 
   return videos.documents as IVideoModel[];
@@ -127,28 +132,78 @@ export async function getTrendingVideos() {
   const videos = await database.listDocuments(
     config.databaseId,
     config.videoCollectionId,
-    [Query.orderAsc("$createdAt"), Query.limit(3)]
+    [Query.orderAsc("$createdAt"), Query.limit(3)],
   );
 
   return videos.documents as IVideoModel[];
 }
 
+// Search Videos
 export async function searchVideos(query: string) {
   const videos = await database.listDocuments(
     config.databaseId,
     config.videoCollectionId,
-    [Query.search("title", query)]
+    [Query.search("title", query)],
   );
 
   return videos.documents as IVideoModel[];
 }
 
+// Get User Videos
 export async function getUserVideos(userId: string) {
   const videos = await database.listDocuments(
     config.databaseId,
     config.videoCollectionId,
-    [Query.equal("creator", userId)]
+    [Query.equal("creator", userId)],
   );
 
   return videos.documents as IVideoModel[];
+}
+
+// upload video
+export async function uploadFile(uri: string) {
+  if (!uri) {
+    throw new Error("URI is not provided");
+  }
+
+  try {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    const file = {
+      name: `${ID.unique()}.${getFileExtension(uri)}`,
+      type: blob.type,
+      size: blob.size,
+      uri: uri,
+    };
+
+    const uploadedFile = await storage.createFile(
+      config.storageId,
+      ID.unique(),
+      file,
+    );
+
+    return uploadedFile;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// upload files in bulk parallel
+export async function uploadFiles(files: ImagePickerAsset[]) {
+  const uploadedFilesUrls: string[] = [];
+
+  for (const file of files) {
+    const uploadedFile = await uploadFile(file.uri);
+    const url = await getFileUrl(uploadedFile.$id);
+
+    uploadedFilesUrls.push(`${url}`);
+  }
+
+  return uploadedFilesUrls;
+}
+
+// get file url
+export async function getFileUrl(fileId: string) {
+  return storage.getFileView(config.storageId, fileId);
 }

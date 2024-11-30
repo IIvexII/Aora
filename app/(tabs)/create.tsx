@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Image } from "react-native";
@@ -12,11 +12,13 @@ import { icons } from "@/constants";
 import FormField from "@/components/form-field";
 import CustomButton from "@/components/custom-button";
 import FileUploader from "@/components/file-uploader";
+import { createVideo, uploadFile, uploadFiles } from "@/lib/appwrite";
+import { getFileExtension } from "@/lib/utils";
 
 type FormType = {
   title: string;
-  video: { uri: string } | undefined;
-  thumbnail: { uri: string } | undefined;
+  video: ImagePicker.ImagePickerAsset | undefined;
+  thumbnail: ImagePicker.ImagePickerAsset | undefined;
   aiPrompt: string;
 };
 
@@ -36,13 +38,32 @@ const Create = () => {
   // check if the user is logged in else redirect it to onboarding screen
   if (!isAuthenticated || !user) return router.replace("/");
 
-  function handleUpload() {
+  async function handleUpload() {
+    if (!form.title || !form.video || !form.thumbnail || !form.aiPrompt) {
+      return Alert.alert("Error", "Please fill all the fields");
+    }
+
     setIsUploading(true);
-    // perform upload logic here
-    // set deplay for temporary loading state
-    setTimeout(() => {
-      setIsUploading(false);
-    }, 2000);
+    try {
+      const [videoUrl, thumbnailUrl] = await uploadFiles([
+        form.video,
+        form.thumbnail,
+      ]);
+
+      const newVideo = {
+        title: form.title,
+        video: videoUrl,
+        thumbnail: thumbnailUrl,
+        prompt: form.aiPrompt,
+        creator: user?.$id,
+      };
+
+      // create video
+      await createVideo(newVideo);
+      Alert.alert("Success", "Video uploaded successfully");
+    } catch (error) {
+      Alert.alert("Error", "Failed to upload file");
+    }
 
     setIsUploading(false);
   }

@@ -40,7 +40,7 @@ export default function VideoCard({
 
       {/* video thumbnail */}
       {isPlaying ? (
-        <View className="mt-4 h-[250px] bg-black-200">
+        <View className="mb-4 h-[250px] bg-black-200">
           <VideoPlayer
             className="h-full w-full"
             source={video}
@@ -53,7 +53,10 @@ export default function VideoCard({
           onPress={() => setIsPlaying(true)}
           className="relative mt-4 items-center justify-center"
         >
-          <Image source={{ uri: thumbnail }} className="h-64 w-full" />
+          <Image
+            source={{ uri: thumbnail }}
+            className="h-64 w-full rounded-3xl"
+          />
           <Image source={icons.play} className="absolute h-12 w-12" />
         </TouchableOpacity>
       )}

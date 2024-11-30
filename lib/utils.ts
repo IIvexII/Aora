@@ -19,8 +19,8 @@ export async function purgeAppCache() {
       // Delete each file/directory within the cache directory
       await Promise.all(
         files.map((file) =>
-          FileSystem.deleteAsync(cacheDirectory + file, { idempotent: true })
-        )
+          FileSystem.deleteAsync(cacheDirectory + file, { idempotent: true }),
+        ),
       );
 
       console.log("app cache purged...");
@@ -28,4 +28,12 @@ export async function purgeAppCache() {
   } catch (error) {
     console.log("Error purging cache:", error);
   }
+}
+
+// get extension from uri
+export function getFileExtension(uri: string) {
+  const uriSplit = uri.split("/");
+  const extension = uriSplit[uriSplit.length - 1].split(".")[1];
+
+  return extension;
 }

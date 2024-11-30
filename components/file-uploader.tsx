@@ -1,19 +1,10 @@
 import { icons } from "@/constants";
+import { ImagePickerAsset } from "expo-image-picker";
 import React, { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  Text,
-} from "react-native";
+import { View, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 
 type FileUploaderProps = {
-  file:
-    | {
-        uri: string;
-      }
-    | undefined;
+  file: ImagePickerAsset | undefined;
   onPress: () => Promise<void>;
   children?: React.ReactNode;
   type: "image" | "video";
